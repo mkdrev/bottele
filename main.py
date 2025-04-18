@@ -2,14 +2,17 @@ from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 import os
 
-TOKEN = os.environ.get("8197998915:AAFZq6bZqBK3qcG-sz7mS7WA__yU2Zq8AR4")  # ambil dari environment variable (Render/Heroku)
+# Ambil token dari environment variable
+TOKEN = os.environ.get("BOT_TOKEN")
+
+app = ApplicationBuilder().token(TOKEN).build()
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
 
     await context.bot.send_photo(
         chat_id=chat_id,
-        photo="https://i.pinimg.com/736x/99/9b/b8/999bb8d77251045efa7364b96c170509.jpg",  # Ganti dengan URL banner TELKOM4D
+        photo="https://i.pinimg.com/736x/99/9b/b8/999bb8d77251045efa7364b96c170509.jpg",  # Ganti sesuai kebutuhan
         caption="Halo Bosku, selamat datang di *TELKOM4D!*\n\n"
                 "Pilih menu di bawah untuk mulai bermain atau cek fitur lainnya.",
         parse_mode="Markdown"
@@ -31,7 +34,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 if __name__ == '__main__':
-    app = ApplicationBuilder().token(TOKEN).build()
     app.add_handler(CommandHandler("start", start))
     print("[✅] Bot TELKOM4D is running...")
     app.run_polling()
