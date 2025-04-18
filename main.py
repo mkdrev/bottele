@@ -1,9 +1,23 @@
-from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
+from flask import Flask
+from threading import Thread
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 import os
 
-TOKEN = os.environ.get("BOT_TOKEN")  # Gunakan nama env yang aman dan jelas
-app = ApplicationBuilder().token(TOKEN).build()
+# === KEEP ALIVE ===
+app = Flask('')
+
+@app.route('/')
+def home():
+    return "Bot TELKOM4D Aktif!"
+
+def run():
+    app.run(host='0.0.0.0', port=8080)
+
+Thread(target=run).start()
+
+# === SETUP BOT ===
+TOKEN = os.environ.get("TOKEN")  # Ambil token dari Environment Render
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
@@ -17,21 +31,19 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
     keyboard = [
-        [InlineKeyboardButton("🎮 PLAY", web_app=WebAppInfo(url="https://telkom4dnaga.com/?ref=sewakw12"))],
-        [InlineKeyboardButton("🎰 RTP GACOR", web_app=WebAppInfo(url="https://telkom4dnaga.com/?ref=sewakw12"))],
-        [InlineKeyboardButton("🎁 PROMOTION", web_app=WebAppInfo(url="https://telkom4dnaga.com/?ref=sewakw12"))],
-        [InlineKeyboardButton("📲 SOCIAL MEDIA", web_app=WebAppInfo(url="https://telkom4dnaga.com/?ref=sewakw12"))],
-        [InlineKeyboardButton("💬 LIVECHAT", web_app=WebAppInfo(url="https://telkom4dnaga.com/?ref=sewakw12"))],
+        [InlineKeyboardButton("🎮 PLAY", url="https://telkom4dnaga.com/?ref=sewakw12")],
+        [InlineKeyboardButton("🎰 RTP GACOR", url="https://telkom4dnaga.com/?ref=sewakw12")],
+        [InlineKeyboardButton("🎁 PROMOTION", url="https://telkom4dnaga.com/?ref=sewakw12")],
+        [InlineKeyboardButton("📲 SOCIAL MEDIA", url="https://telkom4dnaga.com/?ref=sewakw12")],
+        [InlineKeyboardButton("💬 LIVECHAT", url="https://telkom4dnaga.com/?ref=sewakw12")],
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
-    await context.bot.send_message(
-        chat_id=chat_id,
-        text="Pilih salah satu opsi berikut:",
-        reply_markup=reply_markup
-    )
+    await context.bot.send_message(chat_id=chat_id, text="Pilih salah satu opsi berikut:", reply_markup=reply_markup)
 
+# === JALANKAN BOT ===
 if __name__ == '__main__':
-    print("[✅] Bot TELKOM4D is running...")
-    app.add_handler(CommandHandler("start", start))
-    app.run_polling()
+    bot = ApplicationBuilder().token(TOKEN).build()
+    bot.add_handler(CommandHandler("start", start))
+    print("[✅] Bot TELKOM4D aktif!")
+    bot.run_polling()
