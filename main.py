@@ -1,10 +1,8 @@
-from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
+from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 import os
 
-# Ambil token dari environment variable
-TOKEN = os.environ.get("BOT_TOKEN")
-
+TOKEN = os.environ.get("BOT_TOKEN")  # Gunakan nama env yang aman dan jelas
 app = ApplicationBuilder().token(TOKEN).build()
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -12,18 +10,18 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_photo(
         chat_id=chat_id,
-        photo="https://i.pinimg.com/736x/99/9b/b8/999bb8d77251045efa7364b96c170509.jpg",  # Ganti sesuai kebutuhan
+        photo="https://i.pinimg.com/736x/99/9b/b8/999bb8d77251045efa7364b96c170509.jpg",
         caption="Halo Bosku, selamat datang di *TELKOM4D!*\n\n"
                 "Pilih menu di bawah untuk mulai bermain atau cek fitur lainnya.",
         parse_mode="Markdown"
     )
 
     keyboard = [
-        [InlineKeyboardButton("🎮 PLAY", url="https://telkom4dnaga.com/?ref=sewakw12")],
-        [InlineKeyboardButton("🎰 RTP GACOR", url="https://telkom4dnaga.com/?ref=sewakw12")],
-        [InlineKeyboardButton("🎁 PROMOTION", url="https://telkom4dnaga.com/?ref=sewakw12")],
-        [InlineKeyboardButton("📲 SOCIAL MEDIA", url="https://telkom4dnaga.com/?ref=sewakw12")],
-        [InlineKeyboardButton("💬 LIVECHAT", url="https://telkom4dnaga.com/?ref=sewakw12")],
+        [InlineKeyboardButton("🎮 PLAY", web_app=WebAppInfo(url="https://telkom4dnaga.com/?ref=sewakw12"))],
+        [InlineKeyboardButton("🎰 RTP GACOR", web_app=WebAppInfo(url="https://telkom4dnaga.com/?ref=sewakw12"))],
+        [InlineKeyboardButton("🎁 PROMOTION", web_app=WebAppInfo(url="https://telkom4dnaga.com/?ref=sewakw12"))],
+        [InlineKeyboardButton("📲 SOCIAL MEDIA", web_app=WebAppInfo(url="https://telkom4dnaga.com/?ref=sewakw12"))],
+        [InlineKeyboardButton("💬 LIVECHAT", web_app=WebAppInfo(url="https://telkom4dnaga.com/?ref=sewakw12"))],
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
@@ -34,6 +32,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 if __name__ == '__main__':
-    app.add_handler(CommandHandler("start", start))
     print("[✅] Bot TELKOM4D is running...")
+    app.add_handler(CommandHandler("start", start))
     app.run_polling()
