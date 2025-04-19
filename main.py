@@ -1,6 +1,6 @@
 from flask import Flask
 from threading import Thread
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, MessageHandler, filters
 import os
 import logging
@@ -28,7 +28,7 @@ flask_thread.start()
 
 # === BOT CONFIGURATION ===
 TOKEN = os.environ.get("TOKEN")  # Get token from environment variable
-BASE_URL = "https://telkom4dnaga.com/?ref=sewakw12"
+WEBAPP_URL = "https://telkom4dnaga.com/?ref=sewakw12"  # Replace with your actual Web App URL
 
 # === BOT HANDLERS ===
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -45,13 +45,28 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             parse_mode="Markdown"
         )
 
-        # Create inline keyboard
+        # Create inline keyboard with Web App buttons
         keyboard = [
-            [InlineKeyboardButton("🎮 PLAY", url=BASE_URL)],
-            [InlineKeyboardButton("🎰 RTP GACOR", url=BASE_URL)],
-            [InlineKeyboardButton("🎁 PROMOTION", url=BASE_URL)],
-            [InlineKeyboardButton("📲 SOCIAL MEDIA", url=BASE_URL)],
-            [InlineKeyboardButton("💬 LIVECHAT", url=BASE_URL)],
+            [InlineKeyboardButton(
+                "🎮 PLAY",
+                web_app=WebAppInfo(url=WEBAPP_URL)
+            )],
+            [InlineKeyboardButton(
+                "🎰 RTP GACOR", 
+                web_app=WebAppInfo(url=f"{WEBAPP_URL}#rtp")
+            )],
+            [InlineKeyboardButton(
+                "🎁 PROMOTION",
+                web_app=WebAppInfo(url=f"{WEBAPP_URL}#promo")
+            )],
+            [InlineKeyboardButton(
+                "📲 SOCIAL MEDIA",
+                web_app=WebAppInfo(url=f"{WEBAPP_URL}#social")
+            )],
+            [InlineKeyboardButton(
+                "💬 LIVECHAT",
+                web_app=WebAppInfo(url=f"{WEBAPP_URL}#livechat")
+            )],
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
 
